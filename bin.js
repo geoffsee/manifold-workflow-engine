@@ -5,59 +5,95 @@ import {
   ManifoldRegion,
   WorkflowFunctionManifold,
   WorkflowOperator,
+  NestedManifoldRegion,
 } from './lib.js';
 
-async function demonstrateManifold() {
-  // Initialize services and manifold
-  const llm = new DummyLlmService();
-  const manifold = new WorkflowFunctionManifold(llm);
+async function demonstrateNestedManifold() {
+  console.log('\n🚀 Starting Nested Manifold Demonstration\n');
 
-  // Create operators
-  const dataAnalysisOp = new WorkflowOperator('analysis', async state => {
-    console.log('Performing data analysis...');
+  console.log('📦 Creating Secondary Manifold...');
+  const nestedLlm = new DummyLlmService();
+  const nestedManifold = new WorkflowFunctionManifold(nestedLlm);
+
+  const validateOp = new WorkflowOperator('validation', async state => {
+    console.log('  ✓ Validating data structure');
+    return { ...state, validated: true };
+  });
+
+  const cleanOp = new WorkflowOperator('cleaning', async state => {
+    console.log('  ✓ Cleaning data');
+    return { ...state, cleaned: true };
+  });
+
+  const validateRegion = new ManifoldRegion('validation', [validateOp]);
+  const cleanRegion = new ManifoldRegion('cleaning', [cleanOp]);
+
+  // Set up nested manifold regions
+  validateRegion.connectTo(cleanRegion);
+  nestedManifold.addRegion(validateRegion);
+  nestedManifold.addRegion(cleanRegion);
+
+  console.log('📦 Creating Primary Manifold...');
+  const mainLlm = new DummyLlmService();
+  const mainManifold = new WorkflowFunctionManifold(mainLlm);
+
+  const analysisOp = new WorkflowOperator('analysis', async state => {
+    console.log('  ✓ Performing data analysis');
     return { ...state, analyzed: true };
   });
 
-  const dataProcessingOp = new WorkflowOperator('processing', async state => {
-    console.log('Processing data...');
-    return { ...state, processed: true };
-  });
-
-  const dataTransformOp = new WorkflowOperator('transformation', async state => {
-    console.log('Transforming data...');
+  const transformOp = new WorkflowOperator('transformation', async state => {
+    console.log('  ✓ Transforming results');
     return { ...state, transformed: true };
   });
 
-  // Create regions
-  const analysisRegion = new ManifoldRegion('analysis', [dataAnalysisOp]);
-  const processingRegion = new ManifoldRegion('processing', [dataProcessingOp]);
-  const transformationRegion = new ManifoldRegion('transformation', [dataTransformOp]);
+  // Set up main manifold regions
+  const nestedPreprocessRegion = new NestedManifoldRegion('preprocessing', nestedManifold);
+  const analysisRegion = new ManifoldRegion('analysis', [analysisOp]);
+  const transformRegion = new ManifoldRegion('transformation', [transformOp]);
 
-  // Connect regions
-  analysisRegion.connectTo(processingRegion);
-  processingRegion.connectTo(transformationRegion);
+  nestedPreprocessRegion.connectTo(analysisRegion);
+  analysisRegion.connectTo(transformRegion);
 
-  // Add regions to manifold
-  manifold.addRegion(analysisRegion);
-  manifold.addRegion(processingRegion);
-  manifold.addRegion(transformationRegion);
+  mainManifold.addRegion(nestedPreprocessRegion);
+  mainManifold.addRegion(analysisRegion);
+  mainManifold.addRegion(transformRegion);
 
-  // Demonstrate workflow execution
-  console.log('Starting workflow demonstration...');
+  console.log('\n🔄 Executing Workflow...\n');
 
-  const prompts = ['analyze the data', 'process the results', 'transform the output'];
+  const prompts = [
+    { text: 'validate the input', description: 'Nested: Data Validation' },
+    { text: 'clean the data', description: 'Nested: Data Cleaning' },
+    { text: 'analyze the results', description: 'Main: Data Analysis' },
+    { text: 'transform the output', description: 'Main: Data Transformation' },
+  ];
 
-  for (const prompt of prompts) {
-    console.log(`\nExecuting prompt: "${prompt}"`);
-    await manifold.navigate(prompt);
-    const executed = await manifold.executeWorkflow(prompt);
-    console.log('Current state:', manifold.state);
-    console.log(`Current region: ${manifold.currentRegion.name}`);
-    console.log(`Operation executed: ${executed}`);
+  for (const { text, description } of prompts) {
+    console.log(`📍 Step: ${description}\n   Prompt: "${text}"`);
+
+    try {
+      // First try to navigate
+      const navigated = await mainManifold.navigate(text);
+      if (navigated) {
+        console.log('   ↪ Navigation successful');
+      }
+
+      // Then execute the workflow
+      const executed = await mainManifold.executeWorkflow(text);
+      if (executed) {
+        console.log('   ✅ Execution complete\n');
+      } else {
+        console.log('   ❌ Execution failed - No matching operator found\n');
+      }
+    } catch (error) {
+      console.error(`   ❌ Error: ${error.message}\n`);
+    }
   }
+
+  console.log('🎉 Workflow Demonstration Complete!\n');
 }
 
-// Run the demonstration
-demonstrateManifold().catch(console.error);
-
-export {};
+demonstrateNestedManifold().catch(error => {
+  console.error('❌ Fatal Error:', error);
+  process.exit(1);
+});

@@ -153,6 +153,43 @@ const intent = await llm.query('analyze the data');
 // Returns: { confidence: 0.9, action: 'analysis' }
 ```
 
+## Nested Manifolds
+
+### NestedManifoldRegion
+
+A `NestedManifoldRegion` allows embedding a `WorkflowFunctionManifold` inside a region. This enables creating hierarchical workflows where regions themselves contain sub-workflows.
+
+```javascript
+import {
+  WorkflowFunctionManifold,
+  NestedManifoldRegion,
+  ManifoldRegion,
+  WorkflowOperator,
+  DummyLlmService,
+} from 'workflow-function-manifold';
+
+// Sub-workflow
+const nestedLlm = new DummyLlmService();
+const nestedManifold = new WorkflowFunctionManifold(nestedLlm);
+
+const nestedOperator = new WorkflowOperator('nestedOperation', async state => {
+  return { ...state, nested: true };
+});
+
+const nestedRegion = new ManifoldRegion('nestedRegion', [nestedOperator]);
+nestedManifold.addRegion(nestedRegion);
+
+// Main workflow
+const mainLlm = new DummyLlmService();
+const mainManifold = new WorkflowFunctionManifold(mainLlm);
+
+const nestedManifoldRegion = new NestedManifoldRegion('nestedManifoldRegion', nestedManifold);
+mainManifold.addRegion(nestedManifoldRegion);
+
+await mainManifold.navigate('perform nested operation');
+await mainManifold.executeWorkflow('perform nested operation');
+```
+
 ## Complete Example
 
 Here's a full example demonstrating a three-stage workflow:
@@ -240,6 +277,10 @@ console.log(manifold.state); // Final state after all operations
 #### Methods
 
 - `async execute(state: any): Promise<any>`
+
+### NestedManifoldRegion
+- Extends `ManifoldRegion` and embeds a `WorkflowFunctionManifold`.
+
 
 ## State Management
 
