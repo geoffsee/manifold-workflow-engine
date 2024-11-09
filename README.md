@@ -58,9 +58,41 @@ graph TD
 ```
 
 ## Installation
-
+Use as a library:
 ```bash
 npm install workflow-function-manifold
+```
+For a very basic demonstration, invoke the CLI via npx: 
+```shell 
+$ npx workflow-function-manifold
+
+🔄 Executing Workflow...
+
+📍 Step: Nested: Data Validation
+   Prompt: "validate the input"
+  ✓ Validating data structure
+   ✅ Execution complete
+
+📍 Step: Nested: Data Cleaning
+   Prompt: "clean the data"
+   ↪ Navigation successful
+  ✓ Cleaning data
+   ✅ Execution complete
+
+📍 Step: Main: Data Analysis
+   Prompt: "analyze the results"
+   ↪ Navigation successful
+  ✓ Performing data analysis
+   ✅ Execution complete
+
+📍 Step: Main: Data Transformation
+   Prompt: "transform the output"
+   ↪ Navigation successful
+  ✓ Transforming results
+   ✅ Execution complete
+
+🎉 Workflow Demonstration Complete!
+
 ```
 
 ## Quick Start
