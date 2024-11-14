@@ -18,6 +18,7 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "deploy:dev": "pnpm publish .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
     "fix": "pnpm format && pnpm lint:fix"
