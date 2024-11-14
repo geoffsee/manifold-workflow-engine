@@ -1,4 +1,4 @@
-export class DummyLlmService {
+export class DummyIntentService {
   async query(prompt) {
     const intents = {
       analyze: { confidence: 0.9, action: 'analysis' },
@@ -19,7 +19,6 @@ export class WorkflowOperator {
     this.name = name;
     this.operation = operation;
   }
-
   async execute(state) {
     return await this.operation(state);
   }
@@ -31,16 +30,13 @@ export class ManifoldRegion {
     this.operators = operators;
     this.adjacentRegions = new Set();
   }
-
   addOperator(operator) {
     this.operators.push(operator);
   }
-
   connectTo(region) {
     this.adjacentRegions.add(region);
     region.adjacentRegions.add(this);
   }
-
   async getValidOperators(_state) {
     return this.operators;
   }
@@ -51,18 +47,15 @@ export class NestedManifoldRegion extends ManifoldRegion {
     super(name);
     this.nestedManifold = nestedManifold;
   }
-
   async getValidOperators(state) {
     if (!this.nestedManifold.currentRegion) {
       return [];
     }
     return await this.nestedManifold.currentRegion.getValidOperators(state);
   }
-
   async navigate(prompt) {
     return await this.nestedManifold.navigate(prompt);
   }
-
   async executeWorkflow(prompt) {
     const result = await this.nestedManifold.executeWorkflow(prompt);
     return result;
@@ -70,74 +63,59 @@ export class NestedManifoldRegion extends ManifoldRegion {
 }
 
 export class WorkflowFunctionManifold {
-  constructor(llmService) {
-    this.llmService = llmService;
+  constructor(intentService) {
+    this.intentService = intentService;
     this.regions = new Map();
     this.currentRegion = null;
     this.state = {};
   }
-
   addRegion(region) {
     this.regions.set(region.name, region);
     if (!this.currentRegion) {
       this.currentRegion = region;
     }
   }
-
   async navigate(prompt) {
     try {
-      // If current region is nested, try to navigate within it first
       if (this.currentRegion instanceof NestedManifoldRegion) {
         const nestedNavigated = await this.currentRegion.navigate(prompt);
         if (nestedNavigated) {
           return true;
         }
       }
-
-      const intent = await this.llmService.query(prompt);
+      const intent = await this.intentService.query(prompt);
       if (intent.confidence <= 0.5) {
         return false;
       }
-
-      // Try to find matching region
       const nextRegion = Array.from(this.currentRegion.adjacentRegions).find(region =>
           region.name.toLowerCase().includes(intent.action)
       );
-
       if (nextRegion) {
         this.currentRegion = nextRegion;
         return true;
       }
-
       return false;
     } catch (error) {
-      console.error('Navigation error:', error);
       return false;
     }
   }
-
   async executeWorkflow(prompt) {
     try {
       if (this.currentRegion instanceof NestedManifoldRegion) {
         const nestedResult = await this.currentRegion.executeWorkflow(prompt);
         return nestedResult;
       }
-
-      const intent = await this.llmService.query(prompt);
+      const intent = await this.intentService.query(prompt);
       const operators = await this.currentRegion.getValidOperators(this.state);
-
       const matchedOperator = operators.find(op =>
           op.name.toLowerCase().includes(intent.action)
       );
-
       if (matchedOperator && intent.confidence > 0.5) {
         this.state = await matchedOperator.execute(this.state);
         return true;
       }
-
       return false;
     } catch (error) {
-      console.error('Execution error:', error);
       return false;
     }
   }
