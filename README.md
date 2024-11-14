@@ -8,7 +8,7 @@
 
 
 ### Used in production by:
-- (AI)[geoff.seemueller.io] 🫣
+- [AI](https://geoff.seemueller.io) 🫣
 
 
 CLI: `npx workflow-function-manifold`
