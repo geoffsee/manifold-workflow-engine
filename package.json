@@ -5,6 +5,7 @@
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "main": "lib.js",
   "module": "lib.js",
+  "types": "lib.d.ts",
   "exports": {
     ".": {
       "import": "./lib.js",
