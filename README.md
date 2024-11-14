@@ -2,11 +2,14 @@
 
 > A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
 
-### Used in production by:
-- [AI](geoff.seemueller.io) 🫣
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)  
 ![Node Version](https://img.shields.io/badge/Node-%3E%3D14-green.svg)
+
+
+### Used in production by:
+- [AI](geoff.seemueller.io) 🫣
+
 
 CLI: `npx workflow-function-manifold`
 
