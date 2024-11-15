@@ -55,12 +55,13 @@ async function demonstrateNestedManifold(): Promise<void> {
         { text: 'analyze the results', description: 'Main: Data Analysis' },
         { text: 'transform the output', description: 'Main: Data Transformation' },
     ];
-
-    for (const { text, description } of prompts) {
+    const errorSink = [];
+    for (const { text } of prompts) {
         try {
-            const navigated = await mainManifold.navigate(text);
-            const executed = await mainManifold.executeWorkflow(text);
+            await mainManifold.navigate(text);
+            await mainManifold.executeWorkflow(text);
         } catch (error) {
+            errorSink.push(error);
             // Handle errors silently in demo
         }
     }

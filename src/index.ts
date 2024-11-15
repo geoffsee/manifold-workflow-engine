@@ -1,5 +1,6 @@
 import { log } from './logger';
-
+import "./types";
+import { IntentResult, WorkflowState } from './types';
 export class DummyIntentMap {
     async query(prompt: string): Promise<IntentResult> {
         log.debug(`Processing intent query for prompt: ${prompt}`);
@@ -63,7 +64,7 @@ export class ManifoldRegion {
         region.adjacentRegions.add(this);
     }
 
-    async getValidOperators(state: WorkflowState): Promise<WorkflowOperator[]> {
+    async getValidOperators(_state: WorkflowState): Promise<WorkflowOperator[]> {
         log.debug(`Getting valid operators for region ${this.name}`);
         return this.operators;
     }

@@ -1,5 +1,5 @@
 // src/types.d.ts
-interface WorkflowState {
+export interface WorkflowState {
   [key: string]: unknown;
   validated?: boolean;
   cleaned?: boolean;
@@ -12,7 +12,7 @@ interface WorkflowState {
   step2?: boolean;
 }
 
-interface IntentResult {
+export interface IntentResult {
   confidence: number;
   action: string;
 }
