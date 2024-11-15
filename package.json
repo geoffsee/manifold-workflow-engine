@@ -1,26 +1,27 @@
+
 {
   "name": "workflow-function-manifold",
   "version": "1.0.6",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
-  "main": "lib.js",
-  "module": "lib.js",
-  "types": "lib.d.ts",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "exports": {
     ".": {
-      "import": "./lib.js",
-      "require": "./lib.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     }
   },
   "bin": {
-    "workflow-function-manifold": "./bin.js"
+    "workflow-function-manifold": "./dist/cli.js"
   },
   "scripts": {
-    "start": "node bin.js",
-    "dev": "node bin.js",
-    "cli": "bun cli.ts",
+    "start": "bun src/cli.ts",
+    "dev": "bun src/cli.ts",
+    "build": "rm -rf ./dist && bun build src/* --outdir dist",
+    "cli": "bun src/cli.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint .",
     "deploy:dev": "pnpm publish .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",

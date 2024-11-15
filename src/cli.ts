@@ -4,7 +4,7 @@ import {
     WorkflowFunctionManifold,
     WorkflowOperator,
     NestedManifoldRegion,
-} from '.';
+} from './index';
 
 async function demonstrateNestedManifold() {
     const nestedIntentService = new DummyIntentMap();
