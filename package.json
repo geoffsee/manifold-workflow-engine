@@ -1,7 +1,7 @@
 
 {
   "name": "workflow-function-manifold",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "main": "src/index.ts",
