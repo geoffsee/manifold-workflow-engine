@@ -1,6 +1,6 @@
 {
   "name": "workflow-function-manifold",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "main": "src/index.ts",
@@ -23,7 +23,7 @@
     "cli": "bun src/cli.ts",
     "test": "node dist/cli.js && bun test",
     "lint": "eslint .",
-    "deploy:dev": "pnpm publish .",
+    "deploy:dev": "pnpm build && pnpm publish .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
     "fix": "pnpm format && pnpm lint:fix"
