@@ -1,13 +1,14 @@
 // core.test.ts
 import { DummyIntentMap, WorkflowFunctionManifold, WorkflowOperator, ManifoldRegion, NestedManifoldRegion } from '../src';
 import {test, beforeEach, describe, expect, jest} from "bun:test";
+
 describe('WorkflowFunctionManifold Core Test Suite', () => {
-    let intentService: DummyIntentMap;
+    let intentMap: DummyIntentMap;
     let manifold: WorkflowFunctionManifold;
 
     beforeEach(() => {
-        intentService = new DummyIntentMap();
-        manifold = new WorkflowFunctionManifold(intentService);
+        intentMap = new DummyIntentMap();
+        manifold = new WorkflowFunctionManifold(intentMap);
     });
 
     test('Should add a region and set it as the current region if none exist', () => {

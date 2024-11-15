@@ -1,6 +1,6 @@
 {
   "name": "workflow-function-manifold",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "main": "src/index.ts",
@@ -19,7 +19,7 @@
   "scripts": {
     "start": "bun src/cli.ts",
     "dev": "bun src/cli.ts",
-    "build": "rm -rf ./dist && bun build src/* --outdir dist --target browser --format esm --minify",
+    "build": "rm -rf ./dist && bun build src/* --outdir dist --target browser --format esm --minify && chmod +x dist/cli.js",
     "cli": "bun src/cli.ts",
     "test": "node dist/cli.js && bun test",
     "lint": "eslint .",
