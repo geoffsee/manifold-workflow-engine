@@ -74,10 +74,10 @@ import {
   WorkflowFunctionManifold,
   ManifoldRegion,
   WorkflowOperator,
-  DummyIntentService,
+  DummyIntentMap,
 } from 'workflow-function-manifold';
 
-const llm = new DummyIntentService();
+const llm = new DummyIntentMap();
 const manifold = new WorkflowFunctionManifold(llm);
 
 const analysisOperator = new WorkflowOperator('analysis', async state => ({
@@ -93,7 +93,7 @@ await manifold.navigate('analyze the data');
 await manifold.executeWorkflow('analyze the data');
 ```
 
-> **Note:** `DummyIntentService` uses basic keyword matching. Include keywords like `'analyze'`, `'process'`, or `'transform'` for default operators to work.
+> **Note:** `DummyIntentMap` uses basic keyword matching. Include keywords like `'analyze'`, `'process'`, or `'transform'` for default operators to work.
 
 ## Core Components
 
@@ -126,12 +126,12 @@ Defines an operation that can be executed within a region.
 const operator = new WorkflowOperator('operatorName', async state => newState);
 ```
 
-### `DummyIntentService`
+### `DummyIntentMap`
 
 A basic intent-matching service.
 
 ```javascript
-const intentService = new DummyIntentService();
+const intentService = new DummyIntentMap();
 const intent = await intentService.query('analyze the data');
 ```
 
@@ -141,36 +141,36 @@ Here's a complete workflow demonstration:
 
 ```javascript
 async function createWorkflow() {
-  const intentService = new DummyIntentService();
-  const manifold = new WorkflowFunctionManifold(intentService);
+    const intentService = new DummyIntentMap();
+    const manifold = new WorkflowFunctionManifold(intentService);
 
-  const analysisOp = new WorkflowOperator('analysis', async state => ({
-    ...state,
-    analyzed: true,
-  }));
+    const analysisOp = new WorkflowOperator('analysis', async state => ({
+        ...state,
+        analyzed: true,
+    }));
 
-  const processingOp = new WorkflowOperator('processing', async state => ({
-    ...state,
-    processed: true,
-  }));
+    const processingOp = new WorkflowOperator('processing', async state => ({
+        ...state,
+        processed: true,
+    }));
 
-  const transformOp = new WorkflowOperator('transformation', async state => ({
-    ...state,
-    transformed: true,
-  }));
+    const transformOp = new WorkflowOperator('transformation', async state => ({
+        ...state,
+        transformed: true,
+    }));
 
-  const analysisRegion = new ManifoldRegion('analysis', [analysisOp]);
-  const processingRegion = new ManifoldRegion('processing', [processingOp]);
-  const transformRegion = new ManifoldRegion('transformation', [transformOp]);
+    const analysisRegion = new ManifoldRegion('analysis', [analysisOp]);
+    const processingRegion = new ManifoldRegion('processing', [processingOp]);
+    const transformRegion = new ManifoldRegion('transformation', [transformOp]);
 
-  analysisRegion.connectTo(processingRegion);
-  processingRegion.connectTo(transformRegion);
+    analysisRegion.connectTo(processingRegion);
+    processingRegion.connectTo(transformRegion);
 
-  manifold.addRegion(analysisRegion);
-  manifold.addRegion(processingRegion);
-  manifold.addRegion(transformRegion);
+    manifold.addRegion(analysisRegion);
+    manifold.addRegion(processingRegion);
+    manifold.addRegion(transformRegion);
 
-  return manifold;
+    return manifold;
 }
 
 const manifold = await createWorkflow();
@@ -178,8 +178,8 @@ const manifold = await createWorkflow();
 const prompts = ['analyze the data', 'process the results', 'transform the output'];
 
 for (const prompt of prompts) {
-  await manifold.navigate(prompt);
-  await manifold.executeWorkflow(prompt);
+    await manifold.navigate(prompt);
+    await manifold.executeWorkflow(prompt);
 }
 ```
 
