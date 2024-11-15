@@ -1,26 +1,28 @@
 #!/usr/bin/env node
+
 import {
     DummyIntentMap,
     ManifoldRegion,
     WorkflowFunctionManifold,
     WorkflowOperator,
-    NestedManifoldRegion,
+    NestedManifoldRegion
 } from './index';
+import { WorkflowState } from './types';
 
-async function demonstrateNestedManifold() {
+async function demonstrateNestedManifold(): Promise<void> {
     const nestedIntentService = new DummyIntentMap();
     const nestedManifold = new WorkflowFunctionManifold(nestedIntentService);
 
-    const validateOp = new WorkflowOperator('validation', async (state: any) => {
+    const validateOp = new WorkflowOperator('validation', async (state: WorkflowState) => {
         return { ...state, validated: true };
     });
-    const cleanOp = new WorkflowOperator('cleaning', async (state: any) => {
+
+    const cleanOp = new WorkflowOperator('cleaning', async (state: WorkflowState) => {
         return { ...state, cleaned: true };
     });
 
     const validateRegion = new ManifoldRegion('validation', [validateOp]);
     const cleanRegion = new ManifoldRegion('cleaning', [cleanOp]);
-
     validateRegion.connectTo(cleanRegion);
     nestedManifold.addRegion(validateRegion);
     nestedManifold.addRegion(cleanRegion);
@@ -28,10 +30,11 @@ async function demonstrateNestedManifold() {
     const mainIntentService = new DummyIntentMap();
     const mainManifold = new WorkflowFunctionManifold(mainIntentService);
 
-    const analysisOp = new WorkflowOperator('analysis', async (state: any) => {
+    const analysisOp = new WorkflowOperator('analysis', async (state: WorkflowState) => {
         return { ...state, analyzed: true };
     });
-    const transformOp = new WorkflowOperator('transformation', async (state: any) => {
+
+    const transformOp = new WorkflowOperator('transformation', async (state: WorkflowState) => {
         return { ...state, transformed: true };
     });
 
@@ -56,22 +59,13 @@ async function demonstrateNestedManifold() {
     for (const { text, description } of prompts) {
         try {
             const navigated = await mainManifold.navigate(text);
-            if (navigated) {
-                console.log(`📍 Step: ${description}`);
-            }
             const executed = await mainManifold.executeWorkflow(text);
-            if (executed) {
-                console.log(`✅ Execution complete`);
-            } else {
-                console.log(`⚠️  Execution failed`);
-            }
         } catch (error) {
-            console.error(`❌ Error: ${error.message}`);
+            // Handle errors silently in demo
         }
     }
 }
 
-demonstrateNestedManifold().catch(error => {
-    console.error(`❌ Critical Error: ${error.message}`);
+demonstrateNestedManifold().catch(() => {
     process.exit(1);
 });

@@ -16,6 +16,12 @@
   "singleAttributePerLine": false,
   "overrides": [
     {
+      "files": "*.{ts,tsx}",
+      "options": {
+        "parser": "typescript"
+      }
+    },
+    {
       "files": "*.md",
       "options": {
         "proseWrap": "always",
