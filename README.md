@@ -2,74 +2,42 @@
 
 > A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
 
-
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)  
-![Node Version](https://img.shields.io/badge/Node-%3E%3D14-green.svg)
-
-
-### Used in production by:
-- [AI](https://geoff.seemueller.io) 🫣
-
-
-CLI: `npx workflow-function-manifold`
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Core Components](#core-components)
-- [Complete Example](#complete-example)
-- [API Reference](#api-reference)
-- [State Management](#state-management)
-- [LLM Integration](#llm-integration)
-- [Error Handling](#error-handling)
-- [Contributing](#contributing)
-- [License](#license)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Node Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 
 ## Overview
 
-`workflow-function-manifold` enables you to create dynamic workflows that:
+`workflow-function-manifold` is a powerful library for creating dynamic, LLM-driven workflows that leverage a region-based execution model. It enables seamless navigation between different execution regions based on natural language prompts and maintains consistent workflow state throughout the execution process.
 
-- Navigate between different execution regions based on LLM-interpreted intents.
-- Execute operations within regions using state and context.
-- Maintain workflow state across operations.
-- Support flexible region-to-region connections.
+### Key Features
 
-```mermaid
-graph TD
-   MF[Workflow Function Manifold] -->|Initialize| CR[Current Region]
-   MF -->|Navigate| AR[Adjacent Regions]
-   MF -->|Execute| OP[Operators]
-   OP -->|Use| Intent[Intent Service]
-   LLM -->|Match| INT[Intent]
-   INT --> OP
-   OP -->|Update| ST[Workflow State]
-   ST -->|Inform| AR
-   AR -->|Check| NR[Next Region]
-   NR -->|If Valid| CR
-   CR -->|Continue| OP
-   NR -->|If Invalid| END[End]
-   style MF fill:#000000,stroke:#FFFFFF,stroke-width:4px,color:#ffffff
+- **LLM-Driven Navigation**: Navigate between workflow regions using natural language prompts
+- **Region-Based Architecture**: Organize workflow logic into discrete, connected regions
+- **State Management**: Maintain and propagate state across workflow operations
+- **Nested Workflows**: Support for hierarchical workflow structures
+- **Intent Matching**: Built-in intent recognition system with confidence scoring
+- **TypeScript/Javascript Support**
+
+### _Try it_
+```bash
+npx workflow-function-manifold
 ```
 
 ## Installation
-
-Install the library via npm:
 
 ```bash
 npm install workflow-function-manifold
 ```
 
-Run a basic demonstration using the CLI:
+Or using Bun:
 
 ```bash
-npx workflow-function-manifold
+bun add workflow-function-manifold
 ```
 
 ## Quick Start
 
-```javascript
+```typescript
 import {
   WorkflowFunctionManifold,
   ManifoldRegion,
@@ -77,168 +45,186 @@ import {
   DummyIntentMap,
 } from 'workflow-function-manifold';
 
-const llm = new DummyIntentMap();
-const manifold = new WorkflowFunctionManifold(llm);
+// Create a new manifold instance
+const intentService = new DummyIntentMap();
+const manifold = new WorkflowFunctionManifold(intentService);
 
+// Define operators
 const analysisOperator = new WorkflowOperator('analysis', async state => ({
   ...state,
   analyzed: true,
 }));
 
+// Create regions
 const analysisRegion = new ManifoldRegion('analysis', [analysisOperator]);
-
 manifold.addRegion(analysisRegion);
 
+// Execute workflow
 await manifold.navigate('analyze the data');
 await manifold.executeWorkflow('analyze the data');
 ```
 
-> **Note:** `DummyIntentMap` uses basic keyword matching. Include keywords like `'analyze'`, `'process'`, or `'transform'` for default operators to work.
-
 ## Core Components
 
-### `WorkflowFunctionManifold`
+### WorkflowFunctionManifold
 
-The main orchestrator for workflow execution.
+The main orchestrator that manages workflow execution and region navigation.
 
-```javascript
-const manifold = new WorkflowFunctionManifold(llmService);
+```typescript
+const manifold = new WorkflowFunctionManifold(intentService);
 manifold.addRegion(region);
 await manifold.navigate(prompt);
 await manifold.executeWorkflow(prompt);
 ```
 
-### `ManifoldRegion`
+### ManifoldRegion
 
-Represents a workflow region containing operators and connections to other regions.
+Represents a discrete workflow area containing operators and connections to other regions.
 
-```javascript
+```typescript
 const region = new ManifoldRegion('regionName', [operator1, operator2]);
 region.connectTo(otherRegion);
 region.addOperator(newOperator);
 ```
 
-### `WorkflowOperator`
+### WorkflowOperator
 
-Defines an operation that can be executed within a region.
+Defines executable operations within regions.
 
-```javascript
-const operator = new WorkflowOperator('operatorName', async state => newState);
+```typescript
+const operator = new WorkflowOperator('operatorName', async state => {
+  return { ...state, processed: true };
+});
 ```
 
-### `DummyIntentMap`
+### NestedManifoldRegion
 
-A basic intent-matching service.
+Enables hierarchical workflow structures by embedding one manifold within another.
 
-```javascript
-const intentService = new DummyIntentMap();
-const intent = await intentService.query('analyze the data');
+```typescript
+const nestedManifold = new WorkflowFunctionManifold(intentService);
+const nestedRegion = new NestedManifoldRegion('preprocessing', nestedManifold);
 ```
 
 ## Complete Example
 
-Here's a complete workflow demonstration:
+Here's a comprehensive example demonstrating nested workflows:
 
-```javascript
+```typescript
+import {
+  WorkflowFunctionManifold,
+  ManifoldRegion,
+  WorkflowOperator,
+  NestedManifoldRegion,
+  DummyIntentMap,
+} from 'workflow-function-manifold';
+
 async function createWorkflow() {
-    const intentService = new DummyIntentMap();
-    const manifold = new WorkflowFunctionManifold(intentService);
+  // Create nested workflow for preprocessing
+  const nestedIntentService = new DummyIntentMap();
+  const nestedManifold = new WorkflowFunctionManifold(nestedIntentService);
+  
+  const validateOp = new WorkflowOperator('validation', async state => ({
+    ...state,
+    validated: true,
+  }));
+  
+  const cleanOp = new WorkflowOperator('cleaning', async state => ({
+    ...state,
+    cleaned: true,
+  }));
+  
+  const validateRegion = new ManifoldRegion('validation', [validateOp]);
+  const cleanRegion = new ManifoldRegion('cleaning', [cleanOp]);
+  
+  validateRegion.connectTo(cleanRegion);
+  nestedManifold.addRegion(validateRegion);
+  nestedManifold.addRegion(cleanRegion);
 
-    const analysisOp = new WorkflowOperator('analysis', async state => ({
-        ...state,
-        analyzed: true,
-    }));
-
-    const processingOp = new WorkflowOperator('processing', async state => ({
-        ...state,
-        processed: true,
-    }));
-
-    const transformOp = new WorkflowOperator('transformation', async state => ({
-        ...state,
-        transformed: true,
-    }));
-
-    const analysisRegion = new ManifoldRegion('analysis', [analysisOp]);
-    const processingRegion = new ManifoldRegion('processing', [processingOp]);
-    const transformRegion = new ManifoldRegion('transformation', [transformOp]);
-
-    analysisRegion.connectTo(processingRegion);
-    processingRegion.connectTo(transformRegion);
-
-    manifold.addRegion(analysisRegion);
-    manifold.addRegion(processingRegion);
-    manifold.addRegion(transformRegion);
-
-    return manifold;
+  // Create main workflow
+  const mainIntentService = new DummyIntentMap();
+  const mainManifold = new WorkflowFunctionManifold(mainIntentService);
+  
+  const nestedPreprocessRegion = new NestedManifoldRegion('preprocessing', nestedManifold);
+  const analysisRegion = new ManifoldRegion('analysis', [
+    new WorkflowOperator('analysis', async state => ({
+      ...state,
+      analyzed: true,
+    })),
+  ]);
+  
+  nestedPreprocessRegion.connectTo(analysisRegion);
+  mainManifold.addRegion(nestedPreprocessRegion);
+  mainManifold.addRegion(analysisRegion);
+  
+  return mainManifold;
 }
 
+// Execute workflow
 const manifold = await createWorkflow();
-
-const prompts = ['analyze the data', 'process the results', 'transform the output'];
+const prompts = [
+  'validate the input',
+  'clean the data',
+  'analyze the results',
+];
 
 for (const prompt of prompts) {
-    await manifold.navigate(prompt);
-    await manifold.executeWorkflow(prompt);
+  await manifold.navigate(prompt);
+  await manifold.executeWorkflow(prompt);
 }
 ```
 
-## API Reference
-
-### `WorkflowFunctionManifold`
-
-#### Constructor
-
-- `constructor(intentService: IntentService)`
-
-#### Methods
-
-- `addRegion(region: ManifoldRegion | NestedManifoldRegion): void`
-- `navigate(prompt: string): Promise<boolean>`
-- `executeWorkflow(prompt: string): Promise<boolean>`
-
-### `ManifoldRegion`
-
-#### Constructor
-
-- `constructor(name: string, operators: WorkflowOperator[] = [])`
-
-#### Methods
-
-- `addOperator(operator: WorkflowOperator): void`
-- `connectTo(region: ManifoldRegion): void`
-
 ## State Management
 
-Operators access and modify the state persistently:
+The library maintains workflow state across operations and regions. Each operator can access and modify the state:
 
-```javascript
-const operator = new WorkflowOperator('example', async state => ({
-  ...state,
-  newValue: 'updated',
-}));
+```typescript
+const operator = new WorkflowOperator('example', async state => {
+  // Access existing state
+  const currentValue = state.someValue;
+  
+  // Return modified state
+  return {
+    ...state,
+    newValue: 'updated',
+    processed: true,
+  };
+});
 ```
 
 ## Error Handling
 
-### Navigation Errors
+The library includes built-in error handling for:
 
-- Logs warnings for unmatched prompts.
-
-### Operator Execution Errors
-
-- Logs warnings for unmatched operators.
-
----
+- Invalid navigation attempts
+- Unmatched intents
+- Operation execution failures
+- State management errors
 
 ## Contributing
 
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/my-feature`.
-3. Commit changes: `git commit -m "Add my feature"`.
-4. Push the branch: `git push origin feature/my-feature`.
-5. Open a pull request.
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'Add my feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Submit a pull request
 
 ## License
 
 MIT © 2024 Geoff Seemueller
+
+## Development
+
+```bash
+# Install dependencies
+bun install
+
+# Run development mode
+bun dev
+
+# Build for production
+bun run build
+
+# Fix formatting and lint issues
+bun run fix
+```
