@@ -1,4 +1,4 @@
-// src/types.d.ts
+// src/types.ts
 export interface WorkflowState {
   [key: string]: unknown;
   validated?: boolean;

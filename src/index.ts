@@ -99,7 +99,7 @@ export class NestedManifoldRegion extends ManifoldRegion {
         const result = await this.nestedManifold.executeWorkflow(prompt);
         if (result) {
             log.debug(`Nested workflow execution successful, updating state`);
-            Object.assign(this.nestedManifold.state, this.nestedManifold.state);
+            Object.assign(this.nestedManifold.state, { ...this.nestedManifold.state, ...result });
         }
         return result;
     }

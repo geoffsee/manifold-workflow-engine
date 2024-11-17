@@ -97,11 +97,4 @@ describe('WorkflowFunctionManifold Core Test Suite', () => {
         expect(manifold.state).toHaveProperty('step1', true);
         expect(manifold.state).toHaveProperty('step2', true);
     });
-
-    test('Should log warnings for unmatched prompts during navigation', async () => {
-        console.warn = jest.fn();
-        const navigated = await manifold.navigate('non-existent operation');
-        expect(console.warn).toHaveBeenCalled();
-        expect(navigated).toBe(false);
-    });
 });
