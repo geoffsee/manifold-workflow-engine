@@ -1,6 +1,6 @@
-import { log } from './logger';
-import "./types";
-import { IntentResult, WorkflowState } from './types';
+import log from './logger';
+import { WorkflowState, IntentResult } from './types';
+
 export class DummyIntentMap {
     async query(prompt: string): Promise<IntentResult> {
         log.debug(`Processing intent query for prompt: ${prompt}`);
@@ -98,7 +98,7 @@ export class NestedManifoldRegion extends ManifoldRegion {
         log.debug(`Executing nested workflow in ${this.name} with prompt: ${prompt}`);
         const result = await this.nestedManifold.executeWorkflow(prompt);
         if (result) {
-            log.debug(`Nested workflow execution successful, updating state`);
+            log.debug(`Nested workflow execution successful, updating state.`);
             Object.assign(this.nestedManifold.state, this.nestedManifold.state);
         }
         return result;
@@ -136,7 +136,6 @@ export class WorkflowFunctionManifold {
     async navigate(prompt: string): Promise<boolean> {
         try {
             log.debug(`Attempting navigation with prompt: ${prompt}`);
-
             if (this.currentRegion instanceof NestedManifoldRegion) {
                 log.debug('Current region is nested, attempting nested navigation');
                 const nestedNavigated = await this.currentRegion.navigate(prompt);
@@ -145,34 +144,28 @@ export class WorkflowFunctionManifold {
                     return true;
                 }
             }
-
             const intent = await this.intentMap.query(prompt);
             if (intent.confidence <= 0.5) {
                 log.warn(`Low confidence intent match: ${intent.confidence}`);
                 return false;
             }
-
             if (!this.currentRegion) {
                 log.error('No current region set');
                 return false;
             }
-
             let nextRegion = Array.from(this.currentRegion.adjacentRegions).find(region =>
               region.name.toLowerCase() === intent.action.toLowerCase()
             );
-
             if (!nextRegion) {
                 nextRegion = Array.from(this.currentRegion.adjacentRegions).find(region =>
                   region.name.toLowerCase().includes(intent.action.toLowerCase())
                 );
             }
-
             if (nextRegion) {
                 log.info(`Navigating from ${this.currentRegion.name} to ${nextRegion.name}`);
                 this.currentRegion = nextRegion;
                 return true;
             }
-
             log.warn(`No valid navigation target found for prompt: ${prompt}`);
             return false;
         } catch (error) {
@@ -184,7 +177,6 @@ export class WorkflowFunctionManifold {
     async executeWorkflow(prompt: string): Promise<boolean> {
         try {
             log.debug(`Executing workflow with prompt: ${prompt}`);
-
             if (this.currentRegion instanceof NestedManifoldRegion) {
                 log.debug('Executing nested workflow');
                 const nestedResult = await this.currentRegion.executeWorkflow(prompt);
@@ -197,18 +189,15 @@ export class WorkflowFunctionManifold {
                 }
                 return nestedResult;
             }
-
             const intent = await this.intentMap.query(prompt);
             if (!this.currentRegion) {
                 log.error('No current region set for workflow execution');
                 return false;
             }
-
             const operators = await this.currentRegion.getValidOperators(this.state);
             const matchedOperator = operators.find(op =>
               op.name.toLowerCase() === intent.action.toLowerCase()
             );
-
             if (matchedOperator && intent.confidence > 0.5) {
                 log.info(`Executing operator ${matchedOperator.name}`);
                 const newState = await matchedOperator.execute(this.state);
@@ -222,7 +211,6 @@ export class WorkflowFunctionManifold {
                 }
                 return true;
             }
-
             log.warn(`No matching operator found for prompt: ${prompt}`);
             return false;
         } catch (error) {

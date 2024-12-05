@@ -18,11 +18,6 @@
 - **Intent Matching**: Built-in intent recognition system with confidence scoring
 - **TypeScript/Javascript Support**
 
-### _Try it_
-```bash
-npx workflow-function-manifold
-```
-
 ## Installation
 
 ```bash
@@ -174,6 +169,11 @@ for (const prompt of prompts) {
 }
 ```
 
+A more complete example can be found in `src/cli.ts`. For fun, experience it in action.
+```bash
+npx workflow-function-manifold
+```
+
 ## State Management
 
 The library maintains workflow state across operations and regions. Each operator can access and modify the state:
@@ -212,10 +212,6 @@ The library includes built-in error handling for:
 4. Push to the branch: `git push origin feature/my-feature`
 5. Submit a pull request
 
-## License
-
-MIT © 2024 Geoff Seemueller
-
 ## Development
 
 ```bash
@@ -231,3 +227,7 @@ bun run build
 # Fix formatting and lint issues
 bun run fix
 ```
+
+## License
+
+This project is licensed under the terms of the [GNU Affero General Public License v3.0 or later](https://www.gnu.org/licenses/agpl-3.0.html).

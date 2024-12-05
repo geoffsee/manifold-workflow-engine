@@ -1,14 +1,14 @@
 {
   "name": "workflow-function-manifold",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
+  "license": "AGPL-3.0-or-later",
+  "repository": "https://github.com/geoffsee/workflow-function-manifold.git",
   "exports": {
     ".": {
       "import": {
-        "types": "./src/index.ts",
+        "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
       }
     }
@@ -16,26 +16,30 @@
   "bin": {
     "workflow-function-manifold": "./dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "bun src/cli.ts",
     "dev": "bun src/cli.ts",
-    "build": "rm -rf ./dist && bun build src/* --outdir dist --target browser --format esm --minify && chmod +x dist/cli.js",
-    "cli": "bun src/cli.ts",
-    "test": "node dist/cli.js && bun test",
+    "build": "rm -rf dist && bun build ./src/index.ts ./src/cli.ts --splitting --outdir dist --target node && bun ./build.ts",
+    "prepublishOnly": "bun run build",
+    "cli": "bun ./src/cli.ts",
+    "test": "bun test && node dist/cli.js",
     "lint": "eslint .",
-    "deploy:dev": "pnpm build && pnpm publish .",
+    "deploy:dev": "bun publish",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
-    "fix": "pnpm format && pnpm lint:fix"
+    "fix": "bun run format && bun run lint:fix"
   },
   "keywords": [],
   "author": "geoffsee",
-  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/bun": "latest",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
+    "bun-plugin-isolated-decl": "^0.1.6",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
     "bun": "^1.1.34",
