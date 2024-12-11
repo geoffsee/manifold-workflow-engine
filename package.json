@@ -22,7 +22,7 @@
   "scripts": {
     "start": "bun src/cli.ts",
     "dev": "bun src/cli.ts",
-    "build": "rm -rf dist && bun build ./src/index.ts ./src/cli.ts --splitting --outdir dist --target node && bun ./build.ts",
+    "build": "rm -rf dist && bun build ./src/index.ts ./src/cli.ts ./src/logger.ts --splitting --outdir dist --target node && bun ./build.ts",
     "prepublishOnly": "bun run build",
     "cli": "bun ./src/cli.ts",
     "test": "bun test && node dist/cli.js",

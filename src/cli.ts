@@ -10,6 +10,7 @@ import {
 import { WorkflowState } from './types';
 import log from './logger';
 
+
 async function demonstrateNestedManifold(): Promise<void> {
     log.info("Starting demonstration of nested manifold.");
 
