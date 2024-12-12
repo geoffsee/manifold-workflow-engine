@@ -2,7 +2,7 @@
 import { Logger, ILogObj } from "tslog";
 
 const log: Logger<ILogObj> = new Logger({
-  name: "workflow-function-manifold",
+  name: "manifold-workflow-engine",
   prettyLogTemplate: "{{yyyy}}-{{mm}}-{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}} {{logLevelName}} [{{name}}] ",
   prettyLogTimeZone: "local"
 });

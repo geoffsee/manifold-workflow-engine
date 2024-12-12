@@ -1,10 +1,11 @@
 {
-  "name": "workflow-function-manifold",
-  "version": "2.0.1",
+  "name": "manifold-workflow-engine",
+  "version": "2.0.2",
+  "author": "seemueller-io",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "license": "AGPL-3.0-or-later",
-  "repository": "https://github.com/geoffsee/workflow-function-manifold.git",
+  "repository": "https://github.com/seemueller-io/workflow-engine.git",
   "exports": {
     ".": {
       "import": {
@@ -14,7 +15,7 @@
     }
   },
   "bin": {
-    "workflow-function-manifold": "./dist/cli.js"
+    "manifold-workflow-engine": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -33,7 +34,6 @@
     "fix": "bun run format && bun run lint:fix"
   },
   "keywords": [],
-  "author": "geoffsee",
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/bun": "latest",

@@ -1,4 +1,4 @@
-# workflow-function-manifold
+# manifold-workflow-engine
 
 > A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
 
@@ -7,7 +7,7 @@
 
 ## Overview
 
-`workflow-function-manifold` is a powerful library for creating dynamic, LLM-driven workflows that leverage a region-based execution model. It enables seamless navigation between different execution regions based on natural language prompts and maintains consistent workflow state throughout the execution process.
+`manifold-workflow-engine` is a powerful library for creating dynamic, LLM-driven workflows that leverage a region-based execution model. It enables seamless navigation between different execution regions based on natural language prompts and maintains consistent workflow state throughout the execution process.
 
 ### Key Features
 
@@ -21,13 +21,13 @@
 ## Installation
 
 ```bash
-npm install workflow-function-manifold
+npm install manifold-workflow-engine
 ```
 
 Or using Bun:
 
 ```bash
-bun add workflow-function-manifold
+bun add manifold-workflow-engine
 ```
 
 ## Quick Start
@@ -38,7 +38,7 @@ import {
   ManifoldRegion,
   WorkflowOperator,
   DummyIntentMap,
-} from 'workflow-function-manifold';
+} from 'manifold-workflow-engine';
 
 // Create a new manifold instance
 const intentService = new DummyIntentMap();
@@ -112,7 +112,7 @@ import {
   WorkflowOperator,
   NestedManifoldRegion,
   DummyIntentMap,
-} from 'workflow-function-manifold';
+} from 'manifold-workflow-engine';
 
 async function createWorkflow() {
   // Create nested workflow for preprocessing
@@ -171,7 +171,7 @@ for (const prompt of prompts) {
 
 A more complete example can be found in `src/cli.ts`. For fun, experience it in action.
 ```bash
-npx workflow-function-manifold
+npx manifold-workflow-engine
 ```
 
 ## State Management
