@@ -2,7 +2,7 @@
 
 A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
 
-![workflow_function_manifold.png](workflow_function_manifold.png)
+![workflow_function_manifold.png](https://github.com/seemueller-io/manifold-workflow-engine/blob/main/workflow_function_manifold.png?raw=true)
 
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
