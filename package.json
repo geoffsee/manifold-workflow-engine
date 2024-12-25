@@ -1,11 +1,21 @@
 {
   "name": "manifold-workflow-engine",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "seemueller-io",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
   "license": "AGPL-3.0-or-later",
   "repository": "https://github.com/seemueller-io/workflow-engine.git",
+  "keywords": [
+    "llm",
+    "workflow",
+    "function",
+    "manifold",
+    "ai",
+    "agent",
+    "agentic",
+    "engine"
+  ],
   "exports": {
     ".": {
       "import": {
@@ -33,7 +43,6 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,yml,yaml}\"",
     "fix": "bun run format && bun run lint:fix"
   },
-  "keywords": [],
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/bun": "latest",
