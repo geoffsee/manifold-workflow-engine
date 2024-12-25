@@ -10,7 +10,6 @@ import {
 import { WorkflowState } from './types';
 import log from './logger';
 
-
 async function demonstrateNestedManifold(): Promise<void> {
     log.info("Starting demonstration of nested manifold.");
 
@@ -19,11 +18,15 @@ async function demonstrateNestedManifold(): Promise<void> {
 
     const validateOp = new WorkflowOperator('validation', async (state: WorkflowState) => {
         log.debug("Validating state.");
+        // Simulate asynchronous work
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return { ...state, validated: true };
     });
 
     const cleanOp = new WorkflowOperator('cleaning', async (state: WorkflowState) => {
         log.debug("Cleaning state.");
+        // Simulate asynchronous work
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return { ...state, cleaned: true };
     });
 
@@ -40,11 +43,15 @@ async function demonstrateNestedManifold(): Promise<void> {
 
     const analysisOp = new WorkflowOperator('analysis', async (state: WorkflowState) => {
         log.debug("Analyzing state.");
+        // Simulate asynchronous work
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return { ...state, analyzed: true };
     });
 
     const transformOp = new WorkflowOperator('transformation', async (state: WorkflowState) => {
         log.debug("Transforming state.");
+        // Simulate asynchronous work
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         return { ...state, transformed: true };
     });
 
@@ -72,6 +79,7 @@ async function demonstrateNestedManifold(): Promise<void> {
         try {
             log.info(`Navigating with prompt: ${text}`);
             await mainManifold.navigate(text);
+
             log.info(`Executing workflow with prompt: ${text}`);
             await mainManifold.executeWorkflow(text);
         } catch (error) {
