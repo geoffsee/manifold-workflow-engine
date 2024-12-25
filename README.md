@@ -1,6 +1,9 @@
 # manifold-workflow-engine
 
-> A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
+A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
+
+![workflow_function_manifold.png](workflow_function_manifold.png)
+
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
