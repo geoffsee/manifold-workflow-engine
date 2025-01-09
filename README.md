@@ -2,7 +2,7 @@
 [![npm version](https://img.shields.io/npm/v/manifold-workflow-engine
 )](https://www.npmjs.com/package/manifold-workflow-engine)
 ![Tests](https://github.com/seemueller-io/manifold-workflow-engine/actions/workflows/tests.yml/badge.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 
 A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.

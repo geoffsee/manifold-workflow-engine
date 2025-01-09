@@ -1,6 +1,6 @@
 {
   "name": "manifold-workflow-engine",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "author": "seemueller-io",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
