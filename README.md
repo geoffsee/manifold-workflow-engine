@@ -1,12 +1,12 @@
 # manifold-workflow-engine
+[![npm version](https://img.shields.io/npm/v/toak)](https://www.npmjs.com/package/toak)
+![Tests](https://github.com/seemueller-io/toak/actions/workflows/tests.yml/badge.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Node Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 
 A TypeScript/JavaScript library for building dynamic, LLM-driven workflows using a region-based execution model.
 
 ![workflow_function_manifold.png](https://github.com/seemueller-io/manifold-workflow-engine/blob/main/workflow_function_manifold.png?raw=true)
-
-
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Node Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 
 ## Overview
 
