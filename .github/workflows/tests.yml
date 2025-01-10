@@ -1,12 +1,18 @@
 name: Tests
-
+permissions:
+  pull-requests: write
+  statuses: write
+  checks: write
+  contents: read
+  actions: read
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-    types: [opened, reopened]
-
+    types: [opened, reopened, synchronize]
+  merge_group: # triggers workflow for merge queue
+    types: [checks_requested]
 jobs:
   tests:
     permissions:
