@@ -4,7 +4,7 @@ import isolatedDecl from 'bun-plugin-isolated-decl';
 await Bun.build({
   entrypoints: ['./src/index.ts', './src/types.ts'],
   outdir: './dist',
-  target: 'node',
+  target: 'browser',
   plugins: [
     isolatedDecl({
       forceGenerate: true,  // Generate declaration files even if there are errors
