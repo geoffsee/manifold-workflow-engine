@@ -1,6 +1,6 @@
 {
   "name": "manifold-workflow-engine",
-  "version": "2.0.9",
+  "version": "2.1.0",
   "author": "seemueller-io",
   "type": "module",
   "description": "for building dynamic, LLM-driven workflows using a region-based execution model",
@@ -33,7 +33,7 @@
   "scripts": {
     "start": "bun src/cli.ts",
     "dev": "bun src/cli.ts",
-    "build": "rm -rf dist && bun build ./src/index.ts ./src/cli.ts ./src/logger.ts --splitting --outdir dist --target node && bun ./build.ts",
+    "build": "rm -rf dist && bun build ./src/index.ts ./src/cli.ts ./src/logger.ts --splitting --outdir dist --target browser && bun ./build.ts",
     "prepublishOnly": "bun run build",
     "cli": "bun ./src/cli.ts",
     "test": "bun test && node dist/cli.js",
