@@ -196,9 +196,6 @@ const operator = new WorkflowOperator('example', async state => {
 });
 ```
 
-## The Secret
-This documentation doesn't communicate the most critical component for understanding the funcitonality/utility of this library. The intent service evaluates the `latestHumanMessage` and/or `latestAiMessage` again after operator exection. For the most simple example of how this behavior works: to terminate workflow execution in the operator, set `latestHumanMessage` and/or `latestAiMessage` in state to empty strings in the resulting state of the operators.
-
 ## Error Handling
 
 The library includes built-in error handling for:
