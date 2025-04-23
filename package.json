@@ -48,7 +48,7 @@
     "@types/bun": "latest",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
-    "bun-plugin-isolated-decl": "^0.1.6",
+    "bun-plugin-isolated-decl": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
     "bun": "^1.1.34",
