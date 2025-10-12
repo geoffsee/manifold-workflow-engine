@@ -1,0 +1,29 @@
+{
+  "name": "tech-news-analyst-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered tech news research assistant using manifold-workflow-engine",
+  "type": "module",
+  "scripts": {
+    "start": "bun index.ts",
+    "dev": "bun --watch index.ts"
+  },
+  "keywords": [
+    "manifold-workflow-engine",
+    "openai",
+    "workflow",
+    "example",
+    "news-analysis"
+  ],
+  "dependencies": {
+    "manifold-workflow-engine": "^2.1.1",
+    "openai": "^4.77.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
