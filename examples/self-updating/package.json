@@ -1,0 +1,30 @@
+{
+  "name": "self-updating-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Adaptive data processing pipeline that learns and evolves using manifold-workflow-engine",
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "start": "bun index.ts",
+    "dev": "bun --watch index.ts"
+  },
+  "keywords": [
+    "manifold-workflow-engine",
+    "workflow",
+    "adaptive",
+    "self-updating",
+    "example"
+  ],
+  "dependencies": {
+    "manifold-workflow-engine": "^2.1.1",
+    "unstorage": "^1.17.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}
