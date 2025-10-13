@@ -336,7 +336,7 @@ async function runTests() {
   });
   printResult('Generated URL', docUrl);
   results['util-doc-url'] =
-    docUrl.includes('api.gdeltproject.org') &&
+    (new URL(docUrl).host === 'api.gdeltproject.org') &&
     docUrl.includes('query=test') &&
     docUrl.includes('mode=ArtList');
   console.log(results['util-doc-url'] ? 'Test PASSED' : 'Test FAILED');
