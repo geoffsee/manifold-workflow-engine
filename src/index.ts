@@ -23,88 +23,6 @@ export class DummyIntentMap {
     }
 }
 
-export class WorkflowOperator {
-    name: string;
-    operation: (state: WorkflowState) => Promise<WorkflowState>;
-
-    constructor(name: string, operation: (state: WorkflowState) => Promise<WorkflowState>) {
-        this.name = name;
-        this.operation = operation;
-        log.info(`Created new WorkflowOperator: ${name}`);
-    }
-
-    async execute(state: WorkflowState): Promise<WorkflowState> {
-        log.debug(`Executing operator ${this.name} with state: ${JSON.stringify(state)}`);
-        const result = await this.operation(state);
-        log.debug(`Operator ${this.name} execution complete. New state: ${JSON.stringify(result)}`);
-        return result;
-    }
-}
-
-export class ManifoldRegion {
-    name: string;
-    operators: WorkflowOperator[];
-    adjacentRegions: Set<ManifoldRegion>;
-
-    constructor(name: string, operators: WorkflowOperator[] = []) {
-        this.name = name;
-        this.operators = operators;
-        this.adjacentRegions = new Set<ManifoldRegion>();
-        log.info(`Created new ManifoldRegion: ${name} with ${operators.length} operators`);
-    }
-
-    addOperator(operator: WorkflowOperator): void {
-        log.debug(`Adding operator ${operator.name} to region ${this.name}`);
-        this.operators.push(operator);
-    }
-
-    connectTo(region: ManifoldRegion): void {
-        log.info(`Connecting region ${this.name} to ${region.name}`);
-        this.adjacentRegions.add(region);
-        region.adjacentRegions.add(this);
-    }
-
-    async getValidOperators(_state: WorkflowState): Promise<WorkflowOperator[]> {
-        log.debug(`Getting valid operators for region ${this.name}`);
-        return this.operators;
-    }
-}
-
-export class NestedManifoldRegion extends ManifoldRegion {
-    nestedManifold: WorkflowFunctionManifold;
-
-    constructor(name: string, nestedManifold: WorkflowFunctionManifold) {
-        super(name);
-        this.nestedManifold = nestedManifold;
-        this.nestedManifold.state = {};
-        log.info(`Created new NestedManifoldRegion: ${name}`);
-    }
-
-    async getValidOperators(state: WorkflowState): Promise<WorkflowOperator[]> {
-        log.debug(`Getting valid operators for nested region ${this.name}`);
-        if (!this.nestedManifold.currentRegion) {
-            log.warn(`No current region in nested manifold for ${this.name}`);
-            return [];
-        }
-        return await this.nestedManifold.currentRegion.getValidOperators(state);
-    }
-
-    async navigate(prompt: string): Promise<boolean> {
-        log.debug(`Navigating nested manifold in ${this.name} with prompt: ${prompt}`);
-        return await this.nestedManifold.navigate(prompt);
-    }
-
-    async executeWorkflow(prompt: string): Promise<boolean> {
-        log.debug(`Executing nested workflow in ${this.name} with prompt: ${prompt}`);
-        const result = await this.nestedManifold.executeWorkflow(prompt);
-        if (result) {
-            log.debug(`Nested workflow execution successful, updating state.`);
-            Object.assign(this.nestedManifold.state, this.nestedManifold.state);
-        }
-        return result;
-    }
-}
-
 export class WorkflowFunctionManifold {
     intentMap: DummyIntentMap;
     regions: Map<string, ManifoldRegion>;
@@ -219,3 +137,88 @@ export class WorkflowFunctionManifold {
         }
     }
 }
+
+export class ManifoldRegion {
+    name: string;
+    operators: WorkflowOperator[];
+    adjacentRegions: Set<ManifoldRegion>;
+
+    constructor(name: string, operators: WorkflowOperator[] = []) {
+        this.name = name;
+        this.operators = operators;
+        this.adjacentRegions = new Set<ManifoldRegion>();
+        log.info(`Created new ManifoldRegion: ${name} with ${operators.length} operators`);
+    }
+
+    addOperator(operator: WorkflowOperator): void {
+        log.debug(`Adding operator ${operator.name} to region ${this.name}`);
+        this.operators.push(operator);
+    }
+
+    connectTo(region: ManifoldRegion): void {
+        log.info(`Connecting region ${this.name} to ${region.name}`);
+        this.adjacentRegions.add(region);
+        region.adjacentRegions.add(this);
+    }
+
+    async getValidOperators(_state: WorkflowState): Promise<WorkflowOperator[]> {
+        log.debug(`Getting valid operators for region ${this.name}`);
+        return this.operators;
+    }
+}
+
+
+export class WorkflowOperator {
+    name: string;
+    operation: (state: WorkflowState) => Promise<WorkflowState>;
+
+    constructor(name: string, operation: (state: WorkflowState) => Promise<WorkflowState>) {
+        this.name = name;
+        this.operation = operation;
+        log.info(`Created new WorkflowOperator: ${name}`);
+    }
+
+    async execute(state: WorkflowState): Promise<WorkflowState> {
+        log.debug(`Executing operator ${this.name} with state: ${JSON.stringify(state)}`);
+        const result = await this.operation(state);
+        log.debug(`Operator ${this.name} execution complete. New state: ${JSON.stringify(result)}`);
+        return result;
+    }
+}
+
+export class NestedManifoldRegion extends ManifoldRegion {
+    nestedManifold: WorkflowFunctionManifold;
+
+    constructor(name: string, nestedManifold: WorkflowFunctionManifold) {
+        super(name);
+        this.nestedManifold = nestedManifold;
+        this.nestedManifold.state = {};
+        log.info(`Created new NestedManifoldRegion: ${name}`);
+    }
+
+    async getValidOperators(state: WorkflowState): Promise<WorkflowOperator[]> {
+        log.debug(`Getting valid operators for nested region ${this.name}`);
+        if (!this.nestedManifold.currentRegion) {
+            log.warn(`No current region in nested manifold for ${this.name}`);
+            return [];
+        }
+        return await this.nestedManifold.currentRegion.getValidOperators(state);
+    }
+
+    async navigate(prompt: string): Promise<boolean> {
+        log.debug(`Navigating nested manifold in ${this.name} with prompt: ${prompt}`);
+        return await this.nestedManifold.navigate(prompt);
+    }
+
+    async executeWorkflow(prompt: string): Promise<boolean> {
+        log.debug(`Executing nested workflow in ${this.name} with prompt: ${prompt}`);
+        const result = await this.nestedManifold.executeWorkflow(prompt);
+        if (result) {
+            log.debug(`Nested workflow execution successful, updating state.`);
+            Object.assign(this.nestedManifold.state, this.nestedManifold.state);
+        }
+        return result;
+    }
+}
+
+
